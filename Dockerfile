@@ -11,10 +11,12 @@ RUN apt-get update && \
 
 COPY requirements.txt .
 RUN python -m pip install pipenv
-RUN pipenv install aysncopg
+RUN pipenv install asyncpg
 
 WORKDIR /app
 COPY . /app
 
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
+
+CMD ["pipenv", "shell"]
