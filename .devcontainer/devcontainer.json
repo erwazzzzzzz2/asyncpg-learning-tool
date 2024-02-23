@@ -51,7 +51,7 @@
 				"ms-python.isort",
 				"ms-python.flake8",
 				"ms-azuretools.vscode-docker",
-				"batisteo.vscode-django"
+				"mutantdino.resourcemonitor"
 			]
 		}
 	 },
