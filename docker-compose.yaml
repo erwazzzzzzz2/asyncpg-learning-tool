@@ -8,7 +8,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     volumes:
-      - ./app:/app
+      - ./src:/src
     environment:
       - DB_HOST=postgresdb
       - DB_NAME=db_host
