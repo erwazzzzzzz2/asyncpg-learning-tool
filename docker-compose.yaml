@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  asyncopg:
+    env_file: .env
+    image: 'python-app'
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./app:/app
+    environment:
+      - DB_HOST=postgresdb
+      - DB_NAME=db_host
+      - DB_PORT=5432
+    depends_on:
+      - postgresdb
+
+  postgresdb:
+    env_file: .env
+    image: postgres:15-alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=db_host
+volumes:
+  db-data:
