@@ -1,17 +1,11 @@
 import asyncio
-import os
 
-import asyncpg
+from conn import create_conn
 
 
 async def test_conn():
-    connection = await asyncpg.connect(
-        host=os.environ.get("DB_HOST"),
-        port=os.environ.get("DB_PORT"),
-        user=os.environ.get("DB_USER"),
-        database="postgres",
-        password=os.environ.get("DB_PASS"),
-    )
+
+    connection = await create_conn()
     version = connection.get_server_version()
     print(f"Connected! Postgres version is {version}")
     await connection.close()
