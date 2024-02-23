@@ -1,24 +1,25 @@
 import asyncio
 
-from asyncpg import DuplicateDatabaseError, DuplicateTableError
+from asyncpg import DatabaseDroppedError, DuplicateDatabaseError, DuplicateTableError
 
 from conn import create_conn
 
 CREATE_BRAND_TABLE = """ CREATE TABLE brand (
-            brand_id SERIAL PRIMARY KEY,
+            brand_id INTEGER PRIMARY KEY,
             brand_name VARCHAR(255) NOT NULL
         )"""
 
 CREATE_PRODUCT_TABLE = """ CREATE TABLE product (
             product_id SERIAL PRIMARY KEY,
+            product_name VARCHAR(255) NOT NULL,
             FOREIGN KEY (brand_id)
             REFERENCES brand (brand_id)
             ON UPDATE CASCADE ON DELETE CASCADE
-            product_name VARCHAR(255) NOT NULL
         )"""
 
 SQL_STATEMENTS = [
     CREATE_BRAND_TABLE,
+    CREATE_PRODUCT_TABLE,
 ]
 
 
@@ -36,19 +37,17 @@ async def create_db():
 async def create_db_tables():
     conn = await create_conn("products")
     print("Creating the product database...")
-    for statement in SQL_STATEMENTS:
-        try:
-            status = await conn.execute(statement)
-            print(status)
-        except DuplicateTableError:
-            print(f"Table for command {statement} already exists")
+    try:
+        await conn.execute(CREATE_BRAND_TABLE)
+        await conn.execute(CREATE_PRODUCT_TABLE)
+
+    except DuplicateTableError as e:
+        print("Table already exists")
+        print(e)
 
     print("Finished creating the product database!")
     await conn.close()
 
 
-async def async_main():
-    await asyncio.gather(create_db(), create_db_tables())
-
-
-asyncio.run(async_main())
+asyncio.run(create_db())
+asyncio.run(create_db_tables())
