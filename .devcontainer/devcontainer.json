@@ -56,7 +56,8 @@
 		}
 	 },
 
-	 "postCreateCommand": ""
+	 "postCreateCommand": "",
+	 "postStartCommand": "python src/test_conn.py"
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "devcontainer"
