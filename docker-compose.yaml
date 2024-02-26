@@ -2,7 +2,6 @@ version: '3.4'
 
 services:
   postgresdb:
-    env_file: .env
     image: postgres:15-alpine
     container_name: my-postgres
     volumes:
@@ -11,7 +10,6 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_DB=db_host
       - POSTGRES_PASSWORD=mysecret
     deploy:
       restart_policy:
@@ -33,3 +31,5 @@ services:
         condition: on-failure
         max_attempts: 3
 
+volumes:
+  db-data:
