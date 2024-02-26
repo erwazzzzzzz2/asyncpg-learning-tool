@@ -1,12 +1,11 @@
-version: '3.4'
-
+version: "3.8"
 services:
-  postgresdb:
-    image: postgres:15-alpine
-    container_name: my-postgres
+  postgres:
+    image: postgres:16.2-alpine
+    container_name: some-postgres
     volumes:
-      - db-data:/var/lib/postgresql/data
       - ./src/db:/docker-entrypoint-initdb.d
+      - db-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
     environment:
@@ -17,19 +16,16 @@ services:
         max_attempts: 3
 
   pgadmin:
+    env_file: .env
     image: dpage/pgadmin4
-    container_name: my-pgadmin
+    container_name: some-pgadmin
     volumes:
       - ${PWD}/servers.json:/pgadmin4/servers.json
     ports:
       - 8080:80
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=user@domain.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
     deploy:
       restart_policy:
         condition: on-failure
         max_attempts: 3
-
 volumes:
   db-data:
