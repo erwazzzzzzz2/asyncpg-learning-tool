@@ -1,27 +1,35 @@
 version: '3.4'
 
 services:
-  asyncpg:
-    env_file: .env
-    image: 'python-app'
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    volumes:
-      - ./src:/src
-    environment:
-      - DB_HOST=postgresdb
-      - DB_NAME=db_host
-      - DB_PORT=5432
-    depends_on:
-      - postgresdb
-
   postgresdb:
     env_file: .env
     image: postgres:15-alpine
+    container_name: my-postgres
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./src/db:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_DB=db_host
-volumes:
-  db-data:
+      - POSTGRES_PASSWORD=mysecret
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: my-pgadmin
+    volumes:
+      - ${PWD}/servers.json:/pgadmin4/servers.json
+    ports:
+      - 8080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
