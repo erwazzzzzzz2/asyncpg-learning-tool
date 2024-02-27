@@ -10,6 +10,6 @@ CREATE TABLE products (
 )
 
 -- COPY products
--- FROM '/dataset/products.csv'
+-- FROM '/datasets/products.csv'
 -- DELIMITER ','
 -- CSV HEADER;

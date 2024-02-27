@@ -7,6 +7,6 @@ CREATE TABLE brands (
 
 
 -- COPY brands
--- FROM '/dataset/brands.csv'
+-- FROM '/datasets/brands.csv'
 -- DELIMITER ','
 -- CSV HEADER;
